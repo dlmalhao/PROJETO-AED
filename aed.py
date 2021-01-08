@@ -1,7 +1,23 @@
 from tkinter import *
+from tkinter import messagebox
+
 
 
 def janelaRegistar():
+
+    def registo():
+        emailRegisto=registertxt_username.get()
+        passwordRegisto = registertxt_password.get()
+        confpassRegisto = registertxt_confpassword.get()
+
+        if emailRegisto == "" or passwordRegisto =="" or confpassRegisto=="":
+                messagebox.showerror("Campos Inválidos","Preencha todos os campos")
+      
+        elif  passwordRegisto != confpassRegisto:
+                messagebox.showerror("Passwords diferentes","As passwords são diferentes")
+        else:
+            main_page()
+            registerWindow.withdraw()
 
 
     def voltar ():
@@ -37,7 +53,7 @@ def janelaRegistar():
     registertxt_confpassword = Entry(registerWindow, fg="black", font=("Helvetica", 10), show="*", width=35, relief="raised" )
     registertxt_confpassword.place(x=270,y=370)
 
-    registarButtonRegister= Button(registerWindow, text="Register", width="10", font=("Helvetica", 12), fg="red")
+    registarButtonRegister= Button(registerWindow, text="Register", width="10", font=("Helvetica", 12), fg="red", command=registo)
     registarButtonRegister.place(x=420, y= 400)
 
     menuButton= Button(registerWindow, text="Back", width="10", font=("Helvetica", 12), fg="red", command = voltar)
@@ -169,7 +185,15 @@ def main_page ():
     add_new_recipe = Button(window, text="Add new recipe" , command=recipe_page)
     add_new_recipe.pack(side = TOP, pady=10)
         
+def loginvazio():
 
+    texto = txt_username.get()
+    password= txt_password.get()
+    if texto == "" or password =="":
+        messagebox.showerror("Campos inválidos","Preencha todos os campos")
+       
+    else:
+        main_page()
 loginwindow = Tk()  #invoca classe tk, cria a "main window"
 loginwindow.geometry("800x600")
 loginwindow.title("Projeto de AED")
@@ -193,13 +217,17 @@ txt_password = Entry(loginwindow, fg="black", font=("Helvetica", 10), show="*", 
 txt_password.place(x=270,y=300)
 
 
-loginButton= Button(loginwindow, text="Login", width="10", font=("Helvetica", 12), fg="red", command = main_page)
+loginButton= Button(loginwindow, text="Login", width="10", font=("Helvetica", 12), fg="red", command = loginvazio)
 loginButton.place(x=420, y= 400)
 
 registarButton= Button(loginwindow, text="Register", width="10", font=("Helvetica", 12), fg="red", command = janelaRegistar)
 registarButton.place(x=270, y= 400)
 
- 
+
+
+
+
+
 
 loginwindow.mainloop()
 
