@@ -19,15 +19,25 @@ def janelaRegistar():
         elif  passwordRegisto != confpassRegisto:
             messagebox.showerror("Passwords diferentes","As passwords são diferentes")
 
-        with open("PROJETO-AED\\Ficheiros\\register.txt", "r") as f:
+        else:
+            oEmailExiste = False
+            with open("PROJETO-AED\\Ficheiros\\register.txt", "r") as f:
 
-            for linha_ficheiro in f.readlines():
-                campos = linha_ficheiro.split(";")
-                if campos[0] == emailRegisto:
-                    messagebox.showerror("Erro","Esse utilizador já está registado")
-                else:
-                    main_page()
-                    registerWindow.withdraw()
+                for linha_ficheiro in f.readlines():
+                    campos = linha_ficheiro.split(";")
+                    if campos[0] == emailRegisto:
+                        oEmailExiste = True
+                        messagebox.showerror("Erro","Esse utilizador já está registado")
+                        break
+
+            if oEmailExiste == False:
+                with open("PROJETO-AED\\Ficheiros\\register.txt", "a") as f:
+                    f.write(emailRegisto + ";" + passwordRegisto + "\n")
+                messagebox.showinfo("Sucesso", "O registo foi concluído com sucesso")
+                registerWindow.withdraw()
+                main_page()
+        
+        
 
 
     def voltar ():
