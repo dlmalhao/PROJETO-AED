@@ -1,5 +1,6 @@
 from tkinter import *
 from tkinter import messagebox
+import os
 
 
 def janelaRegistar():
@@ -18,19 +19,15 @@ def janelaRegistar():
         elif  passwordRegisto != confpassRegisto:
             messagebox.showerror("Passwords diferentes","As passwords são diferentes")
 
-        f = open("Ficheiros/register.txt", "a")
-        read = f.readlines()
-        for linha_ficheiro in read:
-            campos = linha_ficheiro.split(";")
-            if campos[0] == emailRegisto:
-                messagebox.showerror("Erro","Esse utilizador já está registado")
-            else:
-                f.write(linha_ficheiro + "\n")
-                main_page()
-                registerWindow.withdraw()
-            
-        f.close()
+        with open("PROJETO-AED\\Ficheiros\\register.txt", "r") as f:
 
+            for linha_ficheiro in f.readlines():
+                campos = linha_ficheiro.split(";")
+                if campos[0] == emailRegisto:
+                    messagebox.showerror("Erro","Esse utilizador já está registado")
+                else:
+                    main_page()
+                    registerWindow.withdraw()
 
 
     def voltar ():
