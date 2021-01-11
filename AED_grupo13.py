@@ -21,7 +21,7 @@ def janelaRegistar():
 
         else:
             oEmailExiste = False
-            with open("PROJETO-AED\\Ficheiros\\register.txt", "r") as f:
+            with open("Ficheiros\\register.txt", "r") as f:
 
                 for linha_ficheiro in f.readlines():
                     campos = linha_ficheiro.split(";")
@@ -31,7 +31,7 @@ def janelaRegistar():
                         break
 
             if oEmailExiste == False:
-                with open("PROJETO-AED\\Ficheiros\\register.txt", "a") as f:
+                with open("Ficheiros\\register.txt", "a") as f:
                     f.write(emailRegisto + ";" + passwordRegisto + "\n")
                 messagebox.showinfo("Sucesso", "O registo foi concluído com sucesso")
                 registerWindow.withdraw()
