@@ -36,6 +36,7 @@ def janelaRegistar():
                 messagebox.showinfo("Sucesso", "O registo foi concluído com sucesso")
                 registerWindow.withdraw()
                 main_page()
+                
         
         
 
@@ -241,13 +242,31 @@ def main_page ():
 
 def loginvazio():
 
-    texto = txt_username.get()
+    isUserRegisted = False
+    user = txt_username.get()
     password= txt_password.get()
-    if texto == "" or password =="":
-        messagebox.showerror("Campos inválidos","Preencha todos os campos")
-       
-    else:
-        main_page()
+    with open("PROJETO-AED\\Ficheiros\\register.txt", "r") as f:
+        for linha in f.readlines():
+            campos = linha.split(";")
+
+        if user == "" or password =="":
+            messagebox.showerror("Campos inválidos","Preencha todos os campos")
+
+        elif not campos[0] == user:
+            messagebox.showerror("Erro","O Utilizador inserido não está registado")
+            
+
+        elif not campos[1] == password:
+            messagebox.showerror("Erro","Password inválida, tente novamente")
+            
+    
+        else:
+            isUserRegisted = True
+            if isUserRegisted == True:
+                messagebox.showinfo("Sucesso","O login foi concluido com sucesso")
+                main_page()
+
+        
 
 loginwindow = Tk()  #invoca classe tk, cria a "main window"
 loginwindow.geometry("800x600")
