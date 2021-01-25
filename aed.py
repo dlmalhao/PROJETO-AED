@@ -1,5 +1,6 @@
 from tkinter import *
 from tkinter import messagebox
+import re
 
 
 
@@ -191,9 +192,15 @@ def loginvazio():
     password= txt_password.get()
     if texto == "" or password =="":
         messagebox.showerror("Campos inválidos","Preencha todos os campos")
-       
-    else:
+
+    elif (re.search(regex,texto)):  
+        print("Valid Email")
         main_page()
+          
+    else:  
+        print("Invalid Email")
+        messagebox.showerror("Email Inválido", "Email Inválido")
+         
 loginwindow = Tk()  #invoca classe tk, cria a "main window"
 loginwindow.geometry("800x600")
 loginwindow.title("Projeto de AED")
@@ -223,11 +230,9 @@ loginButton.place(x=420, y= 400)
 registarButton= Button(loginwindow, text="Register", width="10", font=("Helvetica", 12), fg="red", command = janelaRegistar)
 registarButton.place(x=270, y= 400)
 
-
-
+regex='^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$'
 
 
 
 
 loginwindow.mainloop()
-

@@ -1,6 +1,7 @@
 from tkinter import *
 from tkinter import messagebox
 import os
+import re
 
 
 def janelaRegistar():
@@ -18,24 +19,29 @@ def janelaRegistar():
             
         elif  passwordRegisto != confpassRegisto:
             messagebox.showerror("Passwords diferentes","As passwords são diferentes")
+        
+        elif emailRegisto:
+            if re.search(regex,emailRegisto):
+                oEmailExiste = False
+                with open("Ficheiros\\register.txt", "r") as f:
 
-        else:
-            oEmailExiste = False
-            with open("Ficheiros\\register.txt", "r") as f:
+                    for linha_ficheiro in f.readlines():
+                        campos = linha_ficheiro.split(";")
+                        if campos[0] == emailRegisto:
+                            oEmailExiste = True
+                            messagebox.showerror("Erro","Esse utilizador já está registado")
+                            break
 
-                for linha_ficheiro in f.readlines():
-                    campos = linha_ficheiro.split(";")
-                    if campos[0] == emailRegisto:
-                        oEmailExiste = True
-                        messagebox.showerror("Erro","Esse utilizador já está registado")
-                        break
+                if oEmailExiste == False:
+                    with open("Ficheiros\\register.txt", "a") as f:
+                        f.write(emailRegisto + ";" + passwordRegisto + "\n")
+                        messagebox.showinfo("Sucesso", "O registo foi concluído com sucesso")
+                        registerWindow.withdraw()
+                        main_page()
+            else: messagebox.showerror("Email Inválido", "Email Inválido")
 
-            if oEmailExiste == False:
-                with open("Ficheiros\\register.txt", "a") as f:
-                    f.write(emailRegisto + ";" + passwordRegisto + "\n")
-                messagebox.showinfo("Sucesso", "O registo foi concluído com sucesso")
-                registerWindow.withdraw()
-                main_page()
+        
+           
                 
         
         
@@ -242,29 +248,31 @@ def main_page ():
 
 def loginvazio():
 
+
+
     isUserRegisted = False
-    user = txt_username.get()
-    password= txt_password.get()
-    with open("PROJETO-AED\\Ficheiros\\register.txt", "r") as f:
+    user = str (txt_username.get())
+    password= str(txt_password.get())
+    with open("Ficheiros\\register.txt", "r") as f:
         for linha in f.readlines():
             campos = linha.split(";")
+    print(campos)
 
-        if user == "" or password =="":
-            messagebox.showerror("Campos inválidos","Preencha todos os campos")
+    if user == "" or password =="":
+        messagebox.showerror("Campos inválidos","Preencha todos os campos")
 
-        elif not campos[0] == user:
-            messagebox.showerror("Erro","O Utilizador inserido não está registado")
+    elif not campos[0] == user:
+        messagebox.showerror("Erro","O Utilizador inserido não está registado")
             
 
-        elif not campos[1] == password:
-            messagebox.showerror("Erro","Password inválida, tente novamente")
-            
-    
-        else:
-            isUserRegisted = True
-            if isUserRegisted == True:
-                messagebox.showinfo("Sucesso","O login foi concluido com sucesso")
-                main_page()
+    elif not campos[1] == password:
+        messagebox.showerror("Erro","Password inválida, tente novamente")
+
+    else:
+        isUserRegisted = True
+        if isUserRegisted == True:
+            messagebox.showinfo("Sucesso","O login foi concluido com sucesso")
+            main_page()
 
         
 
@@ -297,7 +305,7 @@ loginButton.place(x=420, y= 400)
 registarButton= Button(loginwindow, text="Register", width="10", font=("Helvetica", 12), fg="red", command = janelaRegistar)
 registarButton.place(x=270, y= 400)
 
- 
+regex='^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$'
 
 loginwindow.mainloop()
 
