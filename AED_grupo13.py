@@ -2,24 +2,25 @@ from tkinter import *
 from tkinter import messagebox
 import os
 import re
+from tkinter import filedialog
+from PIL import ImageTk, Image
 
 
 def janelaRegistar():
-
+    global filename
+    ficheiro_perfil = "Ficheiros\\perfil.txt"
     def registo():
-
+        usernameRegisto= registertxt_usernamePerfil.get()
         emailRegisto = registertxt_username.get()
         passwordRegisto = registertxt_password.get()
         confpassRegisto = registertxt_confpassword.get()
-        linha_ficheiro = str(emailRegisto) + ";" + str(passwordRegisto) + "\n"
+        linha_ficheiro = str(usernameRegisto) + ";" + str(emailRegisto) + ";" + str(passwordRegisto) + "\n"
 
-        if emailRegisto == "" or passwordRegisto == "" or confpassRegisto == "":
-            messagebox.showerror("Campos Inválidos",
-                                 "Preencha todos os campos")
+        if usernameRegisto=="" or emailRegisto == "" or passwordRegisto == "" or confpassRegisto == "":
+            messagebox.showerror("Campos Inválidos", "Preencha todos os campos")
 
         elif passwordRegisto != confpassRegisto:
-            messagebox.showerror("Passwords diferentes",
-                                 "As passwords são diferentes")
+            messagebox.showerror("Passwords diferentes","As passwords são diferentes")
 
         elif emailRegisto:
             if re.search(regex, emailRegisto):
@@ -36,11 +37,12 @@ def janelaRegistar():
 
                 if oEmailExiste == False:
                     with open("Ficheiros\\register.txt", "a") as f:
-                        f.write(emailRegisto + ";" + passwordRegisto + "\n")
+                        f.write(emailRegisto + ";" + passwordRegisto + ";" + usernameRegisto + "\n")
                         messagebox.showinfo(
                             "Sucesso", "O registo foi concluído com sucesso")
                         registerWindow.withdraw()
                         main_page()
+                        guardar_setup()
             else:
                 messagebox.showerror("Email Inválido", "Email Inválido")
 
@@ -54,6 +56,26 @@ def janelaRegistar():
         loginwindow.update()
         loginwindow.deiconify()
 
+    def escolhe_imagem():
+        global filename
+        filename=filedialog.askopenfilename(title="Select file", filetypes=(("jpg files","*.jpg"),("png files","*.png"),("all files","*.*")))
+        global img_perfil
+        img=ImageTk.PhotoImage(file=filename)   
+        canvas.itemconfig(image_id, image=img)
+
+    # Guarda dados no ficheiro perfil.txt
+    def guardar_setup():
+      f = open(ficheiro_perfil, "w")
+      linha = filename      # Imagem d eperfil;tema selecionado
+      f.write(linha + "\n") 
+      f.close()
+      global img
+      # atualiza canvas de imagem de perfil, com imagem guardada em ficheiro
+      img = ImageTk.PhotoImage(file = filename)
+      canvas.itemconfig(image_id, image=img)
+
+
+
     # /-/-/-/-/-/-/-/-/-/-/-
     # Register Window
     # /-/-/-/-/-/-/-/-/-/-/-
@@ -64,17 +86,20 @@ def janelaRegistar():
 
     loginwindow.withdraw()
 
-    registerlbl_login = Label(
-        registerWindow, text="Register", fg="red", font=("Helvetica", 30))
-    registerlbl_login.place(x=330, y=80)
+    registerlbl_login = Label(registerWindow, text="Register", fg="red", font=("Helvetica", 30))
+    registerlbl_login.place(x=330, y=70)
 
-    registerlbl_username = Label(
-        registerWindow, text="Email:", fg="red", font=("Helvetica", 12))
+    registerlbl_username = Label(registerWindow, text="Email:", fg="red", font=("Helvetica", 12))
     registerlbl_username.place(x=270, y=200)
 
-    registertxt_username = Entry(registerWindow,  fg="black", font=(
-        "Helvetica", 10), width=35, relief="raised")
+    registertxt_username = Entry(registerWindow,  fg="black", font=("Helvetica", 10), width=35, relief="raised")
     registertxt_username.place(x=270, y=230)
+
+    registerlbl_usernamePerfil = Label(registerWindow, text="Username:", fg="red", font=("Helvetica", 12))
+    registerlbl_usernamePerfil.place(x=270, y=140)
+
+    registertxt_usernamePerfil = Entry(registerWindow,  fg="black", font=("Helvetica", 10), width=35, relief="raised")
+    registertxt_usernamePerfil.place(x=270, y=170)
 
     registerlbl_password = Label(
         registerWindow, text="Password:", fg="red", font=("Helvetica", 12))
@@ -99,6 +124,26 @@ def janelaRegistar():
     menuButton = Button(registerWindow, text="Back", width="10", font=(
         "Helvetica", 12), fg="red", command=voltar)
     menuButton.place(x=270, y=400)
+
+    #panel
+    #panel1= PanedWindow(registerWindow, width=200, height=200, relief="sunken")
+    #panel1.place(x=20, y=20)
+
+    #canvas
+
+    canvas = Canvas(registerWindow, width = 120, height = 130, bd = 1, relief = "sunken")
+    canvas.place(x=20, y=20)
+
+    button_imagem =Button(registerWindow, text="Selecionar \nFoto de Perfil", width="14", font=("Helvetica", 12), fg="red", command=escolhe_imagem)
+    button_imagem.place(x=18, y=230)
+
+    img=ImageTk.PhotoImage(file = "andre.jpeg")
+
+    image_id= canvas.create_image(0,0, anchor='nw', image=img)
+
+    
+
+
 
 
 def main_page():
@@ -178,6 +223,8 @@ def main_page():
 
         frame2.place(relx=0.5, rely=0.5, anchor=CENTER)
 
+        
+
     loginwindow.withdraw()
 
     # /-/-/-/-/-/-/-/-/-/-/-
@@ -242,7 +289,6 @@ def main_page():
 #/-/-/-/-/-/-/-/-/-/-/-#
 
 
-
 def admin_mode():
 
     def recipe_page():
@@ -256,7 +302,6 @@ def admin_mode():
             top_window.destroy()
             window.update()
             window.deiconify()
-
 
         top_window = Toplevel()
         top_window.geometry("800x600")
@@ -325,9 +370,8 @@ def admin_mode():
     window.geometry("800x600")
     window.title("Home Page")
 
-
     panel1 = PanedWindow(width=100, height=100, bd="3", relief="sunken")
-    panel1.pack( side=TOP)
+    panel1.pack(side=TOP)
 
     frame = Frame(window)
     frame.place(relx=0.5, rely=0.5, anchor=CENTER)
@@ -378,7 +422,6 @@ def admin_mode():
     add_new_recipe.pack(side=TOP, pady=10)
 
 
-
 def login():
 
     isUserRegisted = False
@@ -392,12 +435,13 @@ def login():
 
     else:
         if user == "" or password == "":
-            messagebox.showerror("Campos inválidos","Preencha todos os campos")
+            messagebox.showerror("Campos inválidos",
+                                 "Preencha todos os campos")
         elif re.search(regex, user):
             with open("Ficheiros\\register.txt", "r") as f:
                 for linha_ficheiro in f.readlines():
                     campos = linha_ficheiro.strip().split(";")
-                    
+
                     if campos[0] == user:
                         isUserRegisted = True
 
@@ -405,9 +449,10 @@ def login():
                         isPassCorrect = True
 
                 if isUserRegisted == False:
-                    messagebox.showerror("Erro","Utilizador não registado")
+                    messagebox.showerror("Erro", "Utilizador não registado")
                 elif isPassCorrect == False:
-                    messagebox.showerror("Erro","Password incorreta, tente novamente")
+                    messagebox.showerror(
+                        "Erro", "Password incorreta, tente novamente")
                 elif isUserRegisted == True and isPassCorrect == True:
                     main_page()
                     loginwindow.withdraw()
@@ -426,27 +471,31 @@ loginwindow.configure(bg="#DBE2AC")
 lbl_login = Label(loginwindow, text="Login", fg="red", font=("Helvetica", 30))
 lbl_login.place(x=330, y=80)
 
-lbl_username = Label(loginwindow, text="Email:",fg="red", font=("Helvetica", 12))
+lbl_username = Label(loginwindow, text="Email:",
+                     fg="red", font=("Helvetica", 12))
 lbl_username.place(x=270, y=200)
 
-txt_username = Entry(loginwindow,  fg="black", font=("Helvetica", 10), width=35, relief="raised")
+txt_username = Entry(loginwindow,  fg="black", font=(
+    "Helvetica", 10), width=35, relief="raised")
 txt_username.place(x=270, y=230)
 
-lbl_password = Label(loginwindow, text="Password:",fg="red", font=("Helvetica", 12))
+lbl_password = Label(loginwindow, text="Password:",
+                     fg="red", font=("Helvetica", 12))
 lbl_password.place(x=270, y=270)
 
-txt_password = Entry(loginwindow, fg="black", font=("Helvetica", 10), show="*", width=35, relief="raised")
+txt_password = Entry(loginwindow, fg="black", font=(
+    "Helvetica", 10), show="*", width=35, relief="raised")
 txt_password.place(x=270, y=300)
 
 
-loginButton = Button(loginwindow, text="Login", width="10",font=("Helvetica", 12), fg="red", command=login)
+loginButton = Button(loginwindow, text="Login", width="10",
+                     font=("Helvetica", 12), fg="red", command=login)
 loginButton.place(x=420, y=400)
 
-registarButton = Button(loginwindow, text="Register", width="10", font=("Helvetica", 12), fg="red", command=janelaRegistar)
+registarButton = Button(loginwindow, text="Register", width="10", font=(
+    "Helvetica", 12), fg="red", command=janelaRegistar)
 registarButton.place(x=270, y=400)
 
 regex = '^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$'
 
 loginwindow.mainloop()
-
-

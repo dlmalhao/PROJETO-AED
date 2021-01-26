@@ -1,3 +1,2 @@
-pila@gmail.com;123
-pila2@gmail.com;123
-pila3@gmail.com;123
+diogo@gmail.com;123;Diogo
+123@gmail.com;123;123
