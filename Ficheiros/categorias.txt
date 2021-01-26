@@ -1,0 +1,8 @@
+chicken;chicken()
+salad;salad()
+snacks;snacks()
+pasta;snacks()
+fish;fish()
+meat;meat()
+cakes;cakes()
+soup;soup()

@@ -8,8 +8,8 @@ def janelaRegistar():
 
     def registo():
 
-        emailRegisto = registertxt_username.get()
-        passwordRegisto = registertxt_password.get()
+        emailRegisto = str(registertxt_username.get())
+        passwordRegisto = str(registertxt_password.get())
         confpassRegisto = registertxt_confpassword.get()
         linha_ficheiro = str(emailRegisto) + ";" + str(passwordRegisto) + "\n"
 
@@ -24,6 +24,7 @@ def janelaRegistar():
         elif emailRegisto:
             if re.search(regex, emailRegisto):
                 oEmailExiste = False
+                with open("Ficheiros\\register.txt", "a") as f: pass
                 with open("Ficheiros\\register.txt", "r") as f:
 
                     for linha_ficheiro in f.readlines():
@@ -35,12 +36,14 @@ def janelaRegistar():
                             break
 
                 if oEmailExiste == False:
-                    with open("Ficheiros\\register.txt", "a") as f:
-                        f.write(emailRegisto + ";" + passwordRegisto + "\n")
-                        messagebox.showinfo(
-                            "Sucesso", "O registo foi concluído com sucesso")
-                        registerWindow.withdraw()
-                        main_page()
+                    with open("Ficheiros\\register.txt", "a") as g:
+                        print(emailRegisto)
+                        print(passwordRegisto)
+                        g.write(emailRegisto + ";" + passwordRegisto + "\n")
+
+                    messagebox.showinfo("Sucesso", "O registo foi concluído com sucesso")
+                    registerWindow.withdraw()
+                    main_page()
             else:
                 messagebox.showerror("Email Inválido", "Email Inválido")
 
@@ -103,144 +106,38 @@ def janelaRegistar():
 
 def main_page():
 
-    def recipe_page():
-
-        def back():
-
-            # /-/-/-/-/-/-/-/-/-/-/-
-            # Back button
-            # /-/-/-/-/-/-/-/-/-/-/-
-
-            top_window.destroy()
-            window.update()
-            window.deiconify()
-
-        window.withdraw()
-
-        top_window = Toplevel()
-        top_window.geometry("800x600")
-        top_window.title("Which category ?")
-
-        frame2 = Frame(top_window)
-
-        # /-/-/-/-/-/-/-/-/-/-/-
-        # Back button place
-        # /-/-/-/-/-/-/-/-/-/-/-
-
-        back_button = Button(top_window, text="Back", command=back)
-        back_button.place(x=750, y=7)
-
-        # /-/-/-/-/-/-/-/-/-/-/-
-        # Categorias
-        # /-/-/-/-/-/-/-/-/-/-/-
-
-        chicken_btn = Button(frame2, text="Chicken", width=10, height=3)
-        chicken_btn.grid(padx=15, pady=15)
-
-        fish_btn = Button(frame2, text="Fish", width=10, height=3)
-        fish_btn.grid(row=1, padx=15, pady=15)
-
-        soup_btn = Button(frame2, text="Soup", width=10, height=3)
-        soup_btn.grid(row=2, padx=15, pady=15)
-
-        salad_btn = Button(frame2, text="Salad", width=10, height=3)
-        salad_btn.grid(row=0, column=1, padx=15, pady=15)
-
-        meat_btn = Button(frame2, text="Meat", width=10, height=3)
-        meat_btn.grid(row=1, column=1, padx=15, pady=15)
-
-        vegetarian_btn = Button(frame2, text="Vegetarian", width=10, height=3)
-        vegetarian_btn.grid(row=2, column=1, padx=15, pady=15)
-
-        snacks_btn = Button(frame2, text="Snacks", width=10, height=3)
-        snacks_btn.grid(row=0, column=2, padx=15, pady=15)
-
-        cakes_btn = Button(frame2, text="Cakes", width=10, height=3)
-        cakes_btn.grid(row=1, column=2, padx=15, pady=15)
-
-        beverages_btn = Button(frame2, text="Beverages", width=10, height=3)
-        beverages_btn.grid(row=2, column=2, padx=15, pady=15)
-
-        sauces_btn = Button(frame2, text="Sauces", width=10, height=3)
-        sauces_btn.grid(row=0, column=3, padx=15, pady=15)
-
-        desserts_btn = Button(frame2, text="Desserts", width=10, height=3)
-        desserts_btn.grid(row=1, column=3, padx=15, pady=15)
-
-        appetizers_btn = Button(frame2, text="Appetizers", width=10, height=3)
-        appetizers_btn.grid(row=2, column=3, padx=15, pady=15)
-
-        pasta_btn = Button(frame2, text="Pasta", width=10, height=3)
-        pasta_btn.grid(row=0, column=4, padx=15, pady=15)
-
-        other_btn = Button(frame2, text="Other", width=10, height=3)
-        other_btn.grid(row=1, column=4, padx=15, pady=15)
-
-        frame2.place(relx=0.5, rely=0.5, anchor=CENTER)
-
     loginwindow.withdraw()
-
-    # /-/-/-/-/-/-/-/-/-/-/-
-    # Main Page
-    # /-/-/-/-/-/-/-/-/-/-/-
 
     window = Toplevel()
     window.geometry("800x600")
     window.title("Home Page")
 
-    frame = Frame(window)
-    frame.place(relx=0.5, rely=0.5, anchor=CENTER)
+    # MENU BAR
+    barra_Menu = Menu(window)
 
-    chicken_btn = Button(frame, text="Chicken", width=10, height=3)
-    chicken_btn.grid(padx=15, pady=15)
+    categorias_menu = Menu(barra_Menu, tearoff=0)
 
-    fish_btn = Button(frame, text="Fish", width=10, height=3)
-    fish_btn.grid(row=1, padx=15, pady=15)
+    barra_Menu.add_cascade(label="Categorias", menu=categorias_menu)
+    barra_Menu.add_command(label="Sair", command=window.quit)
 
-    soup_btn = Button(frame, text="Soup", width=10, height=3)
-    soup_btn.grid(row=2, padx=15, pady=15)
+    with open("Ficheiros\\categorias.txt", "r") as f:
+        for linha_ficheiro in f.readlines():
+            campos = linha_ficheiro.strip().split(";")
+            categorias_menu.add_command(label=campos[0], command=campos[1])
 
-    salad_btn = Button(frame, text="Salad", width=10, height=3)
-    salad_btn.grid(row=0, column=1, padx=15, pady=15)
+    window.configure(menu=barra_Menu)
 
-    meat_btn = Button(frame, text="Meat", width=10, height=3)
-    meat_btn.grid(row=1, column=1, padx=15, pady=15)
+    # CONTAINER
 
-    vegetarian_btn = Button(frame, text="Vegetarian", width=10, height=3)
-    vegetarian_btn.grid(row=2, column=1, padx=15, pady=15)
+    panel1 = PanedWindow(window, width=200, height=100, bd="2", relief="sunken")
+    panel1.pack(fill=Y, side=RIGHT)
 
-    snacks_btn = Button(frame, text="Snacks", width=10, height=3)
-    snacks_btn.grid(row=0, column=2, padx=15, pady=15)
+    canvas1 = Canvas(panel1, width=150, height=100, bd="2", relief="sunken")
+    canvas1.pack(side=TOP)
 
-    cakes_btn = Button(frame, text="Cakes", width=10, height=3)
-    cakes_btn.grid(row=1, column=2, padx=15, pady=15)
+    
 
-    beverages_btn = Button(frame, text="Beverages", width=10, height=3)
-    beverages_btn.grid(row=2, column=2, padx=15, pady=15)
-
-    sauces_btn = Button(frame, text="Sauces", width=10, height=3)
-    sauces_btn.grid(row=0, column=3, padx=15, pady=15)
-
-    desserts_btn = Button(frame, text="Desserts", width=10, height=3)
-    desserts_btn.grid(row=1, column=3, padx=15, pady=15)
-
-    appetizers_btn = Button(frame, text="Appetizers", width=10, height=3)
-    appetizers_btn.grid(row=2, column=3, padx=15, pady=15)
-
-    pasta_btn = Button(frame, text="Pasta", width=10, height=3)
-    pasta_btn.grid(row=0, column=4, padx=15, pady=15)
-
-    other_btn = Button(frame, text="Other", width=10, height=3)
-    other_btn.grid(row=1, column=4, padx=15, pady=15)
-
-    add_new_recipe = Button(window, text="Add new recipe", command=recipe_page)
-    add_new_recipe.pack(side=TOP, pady=10)
-
-
-#/-/-/-/-/-/-/-/-/-/-/-#
-# Login Page
-#/-/-/-/-/-/-/-/-/-/-/-#
-
+    window.mainloop()
 
 
 def admin_mode():
@@ -257,7 +154,6 @@ def admin_mode():
             window.update()
             window.deiconify()
 
-
         top_window = Toplevel()
         top_window.geometry("800x600")
         top_window.title("Which category ?")
@@ -270,52 +166,6 @@ def admin_mode():
 
         back_button = Button(top_window, text="Back", command=back)
         back_button.place(x=750, y=7)
-
-        # /-/-/-/-/-/-/-/-/-/-/-
-        # Categorias
-        # /-/-/-/-/-/-/-/-/-/-/-
-
-        chicken_btn = Button(frame2, text="Chicken", width=10, height=3)
-        chicken_btn.grid(padx=15, pady=15)
-
-        fish_btn = Button(frame2, text="Fish", width=10, height=3)
-        fish_btn.grid(row=1, padx=15, pady=15)
-
-        soup_btn = Button(frame2, text="Soup", width=10, height=3)
-        soup_btn.grid(row=2, padx=15, pady=15)
-
-        salad_btn = Button(frame2, text="Salad", width=10, height=3)
-        salad_btn.grid(row=0, column=1, padx=15, pady=15)
-
-        meat_btn = Button(frame2, text="Meat", width=10, height=3)
-        meat_btn.grid(row=1, column=1, padx=15, pady=15)
-
-        vegetarian_btn = Button(frame2, text="Vegetarian", width=10, height=3)
-        vegetarian_btn.grid(row=2, column=1, padx=15, pady=15)
-
-        snacks_btn = Button(frame2, text="Snacks", width=10, height=3)
-        snacks_btn.grid(row=0, column=2, padx=15, pady=15)
-
-        cakes_btn = Button(frame2, text="Cakes", width=10, height=3)
-        cakes_btn.grid(row=1, column=2, padx=15, pady=15)
-
-        beverages_btn = Button(frame2, text="Beverages", width=10, height=3)
-        beverages_btn.grid(row=2, column=2, padx=15, pady=15)
-
-        sauces_btn = Button(frame2, text="Sauces", width=10, height=3)
-        sauces_btn.grid(row=0, column=3, padx=15, pady=15)
-
-        desserts_btn = Button(frame2, text="Desserts", width=10, height=3)
-        desserts_btn.grid(row=1, column=3, padx=15, pady=15)
-
-        appetizers_btn = Button(frame2, text="Appetizers", width=10, height=3)
-        appetizers_btn.grid(row=2, column=3, padx=15, pady=15)
-
-        pasta_btn = Button(frame2, text="Pasta", width=10, height=3)
-        pasta_btn.grid(row=0, column=4, padx=15, pady=15)
-
-        other_btn = Button(frame2, text="Other", width=10, height=3)
-        other_btn.grid(row=1, column=4, padx=15, pady=15)
 
         frame2.place(relx=0.5, rely=0.5, anchor=CENTER)
 
@@ -332,92 +182,40 @@ def admin_mode():
             user.destroy()
             window.update()
             window.deiconify()
-            
+
         window.withdraw()
 
         user = Toplevel()
         user.geometry("800x600")
         user.title("User Page")
 
-        canvas1 = Canvas(user, width= 200, height=200, bd="3", relief="sunken")
-        canvas1.place(x = 330, y = 150)
+        canvas1 = Canvas(user, width=200, height=200, bd="3", relief="sunken")
+        canvas1.place(x=330, y=150)
 
-        panel1 = PanedWindow(user, width=100, height=100, bd="3", relief="sunken")
-        panel1.pack( fill= X, side=TOP)
+        panel1 = PanedWindow(user, width=100, height=100,
+                             bd="3", relief="sunken")
+        panel1.pack(fill=X, side=TOP)
 
         back_button = Button(panel1, text="Back", command=back)
-        back_button.pack(side=LEFT,padx= 10, pady= 10)
-
+        back_button.pack(side=LEFT, padx=10, pady=10)
 
         user.mainloop()
 
-
-    
-
-    
     loginwindow.withdraw()
 
     window = Toplevel()
     window.geometry("800x600")
     window.title("Home Page")
 
+    panel1 = PanedWindow(window, width=100, height=100,
+                         bd="3", relief="sunken")
+    panel1.pack(fill=X, side=TOP)
 
-    panel1 = PanedWindow(window, width=100, height=100, bd="3", relief="sunken")
-    panel1.pack( fill= X, side=TOP)
-
-    user_button = Button(panel1, text="Profile",width=6, height=2 , command= user)
-    user_button.pack(side=RIGHT,padx= 10, pady= 10)
-
-    frame = Frame(window)
-    frame.place(relx=0.5, rely=0.5, anchor=CENTER)
-
-    chicken_btn = Button(frame, text="Chicken", width=10, height=3)
-    chicken_btn.grid(padx=15, pady=15)
-
-    fish_btn = Button(frame, text="Fish", width=10, height=3)
-    fish_btn.grid(row=1, padx=15, pady=15)
-
-    soup_btn = Button(frame, text="Soup", width=10, height=3)
-    soup_btn.grid(row=2, padx=15, pady=15)
-
-    salad_btn = Button(frame, text="Salad", width=10, height=3)
-    salad_btn.grid(row=0, column=1, padx=15, pady=15)
-
-    meat_btn = Button(frame, text="Meat", width=10, height=3)
-    meat_btn.grid(row=1, column=1, padx=15, pady=15)
-
-    vegetarian_btn = Button(frame, text="Vegetarian", width=10, height=3)
-    vegetarian_btn.grid(row=2, column=1, padx=15, pady=15)
-
-    snacks_btn = Button(frame, text="Snacks", width=10, height=3)
-    snacks_btn.grid(row=0, column=2, padx=15, pady=15)
-
-    cakes_btn = Button(frame, text="Cakes", width=10, height=3)
-    cakes_btn.grid(row=1, column=2, padx=15, pady=15)
-
-    beverages_btn = Button(frame, text="Beverages", width=10, height=3)
-    beverages_btn.grid(row=2, column=2, padx=15, pady=15)
-
-    sauces_btn = Button(frame, text="Sauces", width=10, height=3)
-    sauces_btn.grid(row=0, column=3, padx=15, pady=15)
-
-    desserts_btn = Button(frame, text="Desserts", width=10, height=3)
-    desserts_btn.grid(row=1, column=3, padx=15, pady=15)
-
-    appetizers_btn = Button(frame, text="Appetizers", width=10, height=3)
-    appetizers_btn.grid(row=2, column=3, padx=15, pady=15)
-
-    pasta_btn = Button(frame, text="Pasta", width=10, height=3)
-    pasta_btn.grid(row=0, column=4, padx=15, pady=15)
-
-    other_btn = Button(frame, text="Other", width=10, height=3)
-    other_btn.grid(row=1, column=4, padx=15, pady=15)
-
-    add_new_recipe = Button(window, text="Add new recipe", command=recipe_page)
-    add_new_recipe.pack(side=TOP, pady=10)
+    user_button = Button(panel1, text="Profile",
+                         width=6, height=2, command=user)
+    user_button.pack(side=RIGHT, padx=10, pady=10)
 
     window.mainloop()
-
 
 
 def login():
@@ -433,12 +231,13 @@ def login():
 
     else:
         if user == "" or password == "":
-            messagebox.showerror("Campos inválidos","Preencha todos os campos")
+            messagebox.showerror("Campos inválidos",
+                                 "Preencha todos os campos")
         elif re.search(regex, user):
             with open("Ficheiros\\register.txt", "r") as f:
                 for linha_ficheiro in f.readlines():
                     campos = linha_ficheiro.strip().split(";")
-                    
+
                     if campos[0] == user:
                         isUserRegisted = True
 
@@ -446,9 +245,10 @@ def login():
                         isPassCorrect = True
 
                 if isUserRegisted == False:
-                    messagebox.showerror("Erro","Utilizador não registado")
+                    messagebox.showerror("Erro", "Utilizador não registado")
                 elif isPassCorrect == False:
-                    messagebox.showerror("Erro","Password incorreta, tente novamente")
+                    messagebox.showerror(
+                        "Erro", "Password incorreta, tente novamente")
                 elif isUserRegisted == True and isPassCorrect == True:
                     main_page()
                     loginwindow.withdraw()
@@ -467,27 +267,31 @@ loginwindow.configure(bg="#DBE2AC")
 lbl_login = Label(loginwindow, text="Login", fg="red", font=("Helvetica", 30))
 lbl_login.place(x=330, y=80)
 
-lbl_username = Label(loginwindow, text="Email:",fg="red", font=("Helvetica", 12))
+lbl_username = Label(loginwindow, text="Email:",
+                     fg="red", font=("Helvetica", 12))
 lbl_username.place(x=270, y=200)
 
-txt_username = Entry(loginwindow,  fg="black", font=("Helvetica", 10), width=35, relief="raised")
+txt_username = Entry(loginwindow,  fg="black", font=(
+    "Helvetica", 10), width=35, relief="raised")
 txt_username.place(x=270, y=230)
 
-lbl_password = Label(loginwindow, text="Password:",fg="red", font=("Helvetica", 12))
+lbl_password = Label(loginwindow, text="Password:",
+                     fg="red", font=("Helvetica", 12))
 lbl_password.place(x=270, y=270)
 
-txt_password = Entry(loginwindow, fg="black", font=("Helvetica", 10), show="*", width=35, relief="raised")
+txt_password = Entry(loginwindow, fg="black", font=(
+    "Helvetica", 10), show="*", width=35, relief="raised")
 txt_password.place(x=270, y=300)
 
 
-loginButton = Button(loginwindow, text="Login", width="10",font=("Helvetica", 12), fg="red", command=login)
+loginButton = Button(loginwindow, text="Login", width="10",
+                     font=("Helvetica", 12), fg="red", command=login)
 loginButton.place(x=420, y=400)
 
-registarButton = Button(loginwindow, text="Register", width="10", font=("Helvetica", 12), fg="red", command=janelaRegistar)
+registarButton = Button(loginwindow, text="Register", width="10", font=(
+    "Helvetica", 12), fg="red", command=janelaRegistar)
 registarButton.place(x=270, y=400)
 
 regex = '^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$'
 
 loginwindow.mainloop()
-
-
