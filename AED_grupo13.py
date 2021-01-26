@@ -319,6 +319,42 @@ def admin_mode():
 
         frame2.place(relx=0.5, rely=0.5, anchor=CENTER)
 
+    def user():
+
+        window.withdraw()
+
+        def back():
+
+            # /-/-/-/-/-/-/-/-/-/-/-
+            # Back button
+            # /-/-/-/-/-/-/-/-/-/-/-
+
+            user.destroy()
+            window.update()
+            window.deiconify()
+            
+        window.withdraw()
+
+        user = Toplevel()
+        user.geometry("800x600")
+        user.title("User Page")
+
+        canvas1 = Canvas(user, width= 200, height=200, bd="3", relief="sunken")
+        canvas1.place(x = 330, y = 150)
+
+        panel1 = PanedWindow(user, width=100, height=100, bd="3", relief="sunken")
+        panel1.pack( fill= X, side=TOP)
+
+        back_button = Button(panel1, text="Back", command=back)
+        back_button.pack(side=LEFT,padx= 10, pady= 10)
+
+
+        user.mainloop()
+
+
+    
+
+    
     loginwindow.withdraw()
 
     window = Toplevel()
@@ -326,8 +362,11 @@ def admin_mode():
     window.title("Home Page")
 
 
-    panel1 = PanedWindow(width=100, height=100, bd="3", relief="sunken")
-    panel1.pack( side=TOP)
+    panel1 = PanedWindow(window, width=100, height=100, bd="3", relief="sunken")
+    panel1.pack( fill= X, side=TOP)
+
+    user_button = Button(panel1, text="Profile",width=6, height=2 , command= user)
+    user_button.pack(side=RIGHT,padx= 10, pady= 10)
 
     frame = Frame(window)
     frame.place(relx=0.5, rely=0.5, anchor=CENTER)
@@ -376,6 +415,8 @@ def admin_mode():
 
     add_new_recipe = Button(window, text="Add new recipe", command=recipe_page)
     add_new_recipe.pack(side=TOP, pady=10)
+
+    window.mainloop()
 
 
 
