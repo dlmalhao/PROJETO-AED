@@ -11,13 +11,13 @@ def janelaRegistar():
     global imagem
     ficheiro_perfil = "Ficheiros\\perfil.txt"
     def registo():
-        usernameRegisto= registertxt_usernamePerfil.get()
+        usernameRegisto= str(registertxt_usernamePerfil.get())
         emailRegisto = str(registertxt_username.get())
         passwordRegisto = str(registertxt_password.get())
-        confpassRegisto = registertxt_confpassword.get()
-        linha_ficheiro = str(emailRegisto) + ";" + str(passwordRegisto) + "\n"
+        confpassRegisto = str(registertxt_confpassword.get())
+        linha_ficheiro = usernameRegisto + ";" + emailRegisto + ";" + passwordRegisto + "\n"
 
-        if emailRegisto == "" or passwordRegisto == "" or confpassRegisto == "":
+        if emailRegisto == "" or passwordRegisto == "" or confpassRegisto == "" or usernameRegisto == "":
             messagebox.showerror("Campos Inválidos", "Preencha todos os campos")
 
         elif passwordRegisto != confpassRegisto:
@@ -30,17 +30,17 @@ def janelaRegistar():
                 with open("Ficheiros\\register.txt", "r") as f:
 
                     for linha_ficheiro in f.readlines():
-                        campos = linha_ficheiro.split(";")
-                        if campos[0] == emailRegisto:
+                        campos = linha_ficheiro.strip().split(";")
+                        if campos[0] == "":
+                            break
+                        if campos[1] == emailRegisto:
                             oEmailExiste = True
                             messagebox.showerror( "Erro", "Esse utilizador já está registado")
                             break
 
                 if oEmailExiste == False:
                     with open("Ficheiros\\register.txt", "a") as g:
-                        print(emailRegisto)
-                        print(passwordRegisto)
-                        g.write(emailRegisto + ";" + passwordRegisto + "\n")
+                        g.write(usernameRegisto + ";" + emailRegisto + ";" + passwordRegisto + "\n")
 
                     messagebox.showinfo("Sucesso", "O registo foi concluído com sucesso")
                     registerWindow.withdraw()
@@ -70,10 +70,8 @@ def janelaRegistar():
 
     # Guarda dados no ficheiro perfil.txt
     def guardar_setup():
-        f = open("Ficheiros//perfil.txt", "w")
-        linha = imagem      # Imagem d eperfil;tema selecionado
-        f.write(linha) 
-        f.close()
+        with open("Ficheiros//perfil.txt", "w")as f:
+            f.write(imagem) 
         global img
         #atualiza canvas de imagem de perfil, com imagem guardada em ficheiro
         img = ImageTk.PhotoImage(file = imagem)
@@ -149,11 +147,11 @@ def janelaRegistar():
     
 def main_page():
 
-    def escolhe_imagem():
-        imagem=filedialog.askopenfilename(title="Select file", filetypes=(("jpg files",".jpg"),("png files",".png"),("all files",".")))
-        global img 
-        img = ImageTk.PhotoImage(file = imagem)
-        canvas1.itemconfig(img_id, image=img)
+    #def escolhe_imagem():
+        #imagem=filedialog.askopenfilename(title="Select file", filetypes=(("jpg files",".jpg"),("png files",".png"),("all files",".")))
+        #global img 
+        #img = ImageTk.PhotoImage(file = imagem)
+        #canvas1.itemconfig(img_id, image=img)
     
     
 
@@ -196,10 +194,13 @@ def main_page():
     canvas1 = Canvas(panel1, width=100, height=100, bd="2", relief="sunken")
     canvas1.pack(side=TOP)
 
-    btn1 = Button(panel1, text = "Select Image", command = escolhe_imagem)
-    btn1.place(x =20, y = 110)
+    btn1 = Button(panel1, text = "Select Image")
+    btn1.place(x =15, y = 110)
 
-    img=ImageTk.PhotoImage(file= "avatar0.jpg")
+    with open("Ficheiros\\perfil.txt","r")as f:
+        campos2 = f.readline()
+    img10 = campos2.replace("/", "//")
+    img=ImageTk.PhotoImage(file= img10)
     img_id = canvas1.create_image(0,0,anchor = "nw", image = img)
     
     
@@ -258,8 +259,7 @@ def admin_mode():
         canvas1 = Canvas(user, width=200, height=200, bd="3", relief="sunken")
         canvas1.place(x=330, y=150)
 
-        panel1 = PanedWindow(user, width=100, height=100,
-                             bd="3", relief="sunken")
+        panel1 = PanedWindow(user, width=100, height=100, bd="3", relief="sunken")
         panel1.pack(fill=X, side=TOP)
 
         back_button = Button(panel1, text="Back", command=back)
@@ -302,10 +302,10 @@ def login():
                 for linha_ficheiro in f.readlines():
                     campos = linha_ficheiro.strip().split(";")
 
-                    if campos[0] == user:
+                    if campos[1] == user:
                         isUserRegisted = True
 
-                    if campos[1] == password:
+                    if campos[2] == password:
                         isPassCorrect = True
 
                 if isUserRegisted == False:
@@ -336,8 +336,7 @@ loginwindow.configure(bg="#DBE2AC")
 lbl_login = Label(loginwindow, text="Login", fg="red", font=("Helvetica", 30))
 lbl_login.place(x=330, y=80)
 
-lbl_username = Label(loginwindow, text="Email:",
-                     fg="red", font=("Helvetica", 12))
+lbl_username = Label(loginwindow, text="Email:", fg="red", font=("Helvetica", 12))
 lbl_username.place(x=270, y=200)
 
 txt_username = Entry(loginwindow,  fg="black", font=(
