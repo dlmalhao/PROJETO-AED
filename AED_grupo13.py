@@ -8,21 +8,20 @@ import tkinter.font as font
 
 
 def janelaRegistar():
-
+    global imagem
+    ficheiro_perfil = "Ficheiros\\perfil.txt"
     def registo():
-
+        usernameRegisto= registertxt_usernamePerfil.get()
         emailRegisto = str(registertxt_username.get())
         passwordRegisto = str(registertxt_password.get())
         confpassRegisto = registertxt_confpassword.get()
         linha_ficheiro = str(emailRegisto) + ";" + str(passwordRegisto) + "\n"
 
         if emailRegisto == "" or passwordRegisto == "" or confpassRegisto == "":
-            messagebox.showerror("Campos Inválidos",
-                                 "Preencha todos os campos")
+            messagebox.showerror("Campos Inválidos", "Preencha todos os campos")
 
         elif passwordRegisto != confpassRegisto:
-            messagebox.showerror("Passwords diferentes",
-                                 "As passwords são diferentes")
+            messagebox.showerror("Passwords diferentes", "As passwords são diferentes")
 
         elif emailRegisto:
             if re.search(regex, emailRegisto):
@@ -34,8 +33,7 @@ def janelaRegistar():
                         campos = linha_ficheiro.split(";")
                         if campos[0] == emailRegisto:
                             oEmailExiste = True
-                            messagebox.showerror(
-                                "Erro", "Esse utilizador já está registado")
+                            messagebox.showerror( "Erro", "Esse utilizador já está registado")
                             break
 
                 if oEmailExiste == False:
@@ -46,7 +44,9 @@ def janelaRegistar():
 
                     messagebox.showinfo("Sucesso", "O registo foi concluído com sucesso")
                     registerWindow.withdraw()
+                    guardar_setup()
                     main_page()
+                    
             else:
                 messagebox.showerror("Email Inválido", "Email Inválido")
 
@@ -62,21 +62,22 @@ def janelaRegistar():
 
 
     def escolhe_imagem():
+        global imagem
         imagem=filedialog.askopenfilename(title="Select file", filetypes=(("jpg files",".jpg"),("png files",".png"),("all files",".")))
         global img 
         img = ImageTk.PhotoImage(file = imagem)
         canvas1.itemconfig(img_id, image=img)
 
     # Guarda dados no ficheiro perfil.txt
-    #def guardar_setup():
-         #f = open(ficheiro_perfil, "w")
-         #linha = filename      # Imagem d eperfil;tema selecionado
-         #f.write(linha + "\n") 
-         #f.close()
-         #global img
-         # atualiza canvas de imagem de perfil, com imagem guardada em ficheiro
-         #img = ImageTk.PhotoImage(file = filename)
-         #canvas.itemconfig(image_id, image=img)
+    def guardar_setup():
+        f = open("Ficheiros//perfil.txt", "w")
+        linha = imagem      # Imagem d eperfil;tema selecionado
+        f.write(linha) 
+        f.close()
+        global img
+        #atualiza canvas de imagem de perfil, com imagem guardada em ficheiro
+        img = ImageTk.PhotoImage(file = imagem)
+        canvas1.itemconfig(img_id, image=img)
 
     # /-/-/-/-/-/-/-/-/-/-/-
     # Register Window
@@ -109,32 +110,32 @@ def janelaRegistar():
 
     registerlbl_username = Label(
         registerWindow, text="Email:", fg="black",bg = "#D1BEA6", font=("Microsoft YaHei", 12))
-    registerlbl_username.place(x=270, y=200)
+    registerlbl_username.place(x=270, y=220)
 
     registertxt_username = Entry(registerWindow,  fg="black", font=(
         "Microsoft YaHei", 10), width=35, relief="raised")
-    registertxt_username.place(x=270, y=230)
+    registertxt_username.place(x=270, y=250)
 
     registerlbl_password = Label(
         registerWindow, text="Password:", fg="black",bg = "#D1BEA6", font=("Microsoft YaHei", 12))
-    registerlbl_password.place(x=270, y=270)
+    registerlbl_password.place(x=270, y=290)
 
     registertxt_password = Entry(registerWindow, fg="black", font=(
         "Microsoft YaHei", 10), show="*", width=35, relief="raised")
-    registertxt_password.place(x=270, y=300)
+    registertxt_password.place(x=270, y=320)
 
     registerlbl_confpassword = Label(
         registerWindow, text="Confirm Password:", fg="black",bg = "#D1BEA6", font=("Microsoft YaHei", 12))
-    registerlbl_confpassword.place(x=270, y=340)
+    registerlbl_confpassword.place(x=270, y=360)
 
     registertxt_confpassword = Entry(registerWindow, fg="black", font=("Microsoft YaHei", 10), show="*", width=35, relief="raised")
-    registertxt_confpassword.place(x=270, y=370)
+    registertxt_confpassword.place(x=270, y=390)
 
     registarButtonRegister = Button(registerWindow, text="Register", width="10", font=("Microsoft YaHei", 12), fg="black", command=registo)
-    registarButtonRegister.place(x=420, y=400)
+    registarButtonRegister.place(x=430, y=440)
 
     menuButton = Button(registerWindow, text="Back", width="10", font=("Microsoft YaHei", 12), fg="black", command=voltar)
-    menuButton.place(x=270, y=400)
+    menuButton.place(x=280, y=440)
 
     canvas1 = Canvas(registerWindow, width=100, height=100, bd="2", relief="sunken")
     canvas1.place(x = 20, y = 20)
@@ -272,12 +273,10 @@ def admin_mode():
     window.geometry("800x600")
     window.title("Home Page")
 
-    panel1 = PanedWindow(window, width=100, height=100,
-                         bd="3", relief="sunken")
+    panel1 = PanedWindow(window, width=100, height=100, bd="3", relief="sunken")
     panel1.pack(fill=X, side=TOP) 
 
-    user_button = Button(panel1, text="Profile",
-                         width=6, height=2, command=user)
+    user_button = Button(panel1, text="Profile", width=6, height=2, command=user)
     user_button.pack(side=RIGHT, padx=10, pady=10)
 
     window.mainloop()
@@ -347,11 +346,11 @@ txt_username.place(x=270, y=230)
 
 lbl_password = Label(loginwindow, text="Password:",
                      fg="red", font=("Helvetica", 12))
-lbl_password.place(x=270, y=270)
+lbl_password.place(x=270, y=280)
 
 txt_password = Entry(loginwindow, fg="black", font=(
     "Helvetica", 10), show="*", width=35, relief="raised")
-txt_password.place(x=270, y=300)
+txt_password.place(x=270, y=310)
 
 
 loginButton = Button(loginwindow, text="Login", width="10",
