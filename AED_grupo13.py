@@ -68,6 +68,7 @@ def janelaRegistar():
         registerWindow.destroy()
         loginwindow.update()
         loginwindow.deiconify()
+        loginwindow.resizable(False, False)
 
     def escolhe_imagem():
         global imagem
@@ -93,7 +94,7 @@ def janelaRegistar():
     registerWindow = Toplevel(loginwindow)
     registerWindow.title("Register")
     registerWindow.geometry("800x600")
-
+    registerWindow.resizable(False, False)
     registerWindow.configure(bg="#D1BEA6")
 
     # wallpaper registo
@@ -301,9 +302,7 @@ def main_page():
     panel2 = PanedWindow(window, width=400, height=500,
                          bd="2", relief="sunken")
     panel2.place(x=100, y=50)
-
-    btn1 = Button(panel1, text="Select Image")
-    btn1.place(x=15, y=110)
+    
 
     # BUTTON ADD NEW RECIPE
 
@@ -343,6 +342,7 @@ def admin_mode():
         top_window = Toplevel()
         top_window.geometry("800x600")
         top_window.title("Which category ?")
+        top_window.resizable(False, False)
 
         frame2 = Frame(top_window)
 
@@ -392,6 +392,7 @@ def admin_mode():
     window = Toplevel()
     window.geometry("800x600")
     window.title("Home Page")
+    window.resizable(False, False)
 
     panel1 = PanedWindow(window, width=100, height=100,
                          bd="3", relief="sunken")
@@ -440,7 +441,6 @@ def login():
                 elif isUserRegisted == True and isPassCorrect == True:
                     main_page()
                     loginwindow.withdraw()
-
         else:
             messagebox.showerror("Email Inválido", "Email Inválido")
 
@@ -448,42 +448,47 @@ def login():
 loginwindow = Tk()  # invoca classe tk, cria a "main window"
 loginwindow.geometry("800x600")
 loginwindow.title("Projeto de AED")
+loginwindow.resizable(False, False)
+loginwindow.configure(bg="#D1BEA6")
 
 # criar wallpaper
-wall = ImageTk.PhotoImage(file="Images/wallpaper6.jpg")
-wallpaper = Label(loginwindow, image=wall)
-wallpaper.place(x=0, y=0, relwidth=1, relheight=1)
+#wall = ImageTk.PhotoImage(file="Images/wallpaper6.jpg")
+#wallpaper = Label(loginwindow, image=wall)
+#wallpaper.place(x=0, y=0, relwidth=1, relheight=1)
+
 
 original_frame = Frame(loginwindow)
-loginwindow.configure(bg="#DBE2AC")
+loginwindow.configure(bg="#D1BEA6")
 
-lbl_login = Label(loginwindow, text="Login", fg="red", font=("Helvetica", 30))
-lbl_login.place(x=330, y=80)
+
+lbl_login = Label(loginwindow, text="Login", font=("Microsoft YaHei", 20), bg="#D1BEA6")
+lbl_login.place(x=350, y=90)
+
 
 lbl_username = Label(loginwindow, text="Email:",
-                     fg="red", font=("Helvetica", 12))
-lbl_username.place(x=270, y=200)
+                     font=("Microsoft YaHei", 12), bg="#D1BEA6")
+lbl_username.place(x=250, y=200)
 
-txt_username = Entry(loginwindow,  fg="black", font=(
-    "Helvetica", 10), width=35, relief="raised")
-txt_username.place(x=270, y=230)
 
-lbl_password = Label(loginwindow, text="Password:",
-                     fg="red", font=("Helvetica", 12))
-lbl_password.place(x=270, y=280)
+txt_username = Entry(loginwindow,  fg="black", font=("Microsoft YaHei", 12), width=35, relief="raised")
+txt_username.place(x=250, y=230)
 
-txt_password = Entry(loginwindow, fg="black", font=(
-    "Helvetica", 10), show="*", width=35, relief="raised")
-txt_password.place(x=270, y=310)
+
+lbl_password = Label(loginwindow, text="Password:", font=("Microsoft YaHei", 12),bg="#D1BEA6")
+lbl_password.place(x=250, y=280)
+
+
+txt_password = Entry(loginwindow, fg="black", font=("Microsoft YaHei", 12), show="*", width=35, relief="raised")
+txt_password.place(x=250, y=310)
 
 
 loginButton = Button(loginwindow, text="Login", width="10",
-                     font=("Helvetica", 12), fg="red", command=login)
-loginButton.place(x=420, y=400)
+                     font=("Microsoft YaHei", 12), command=login,bg="#D1BEA6")
+loginButton.place(x=450, y=400)
 
-registarButton = Button(loginwindow, text="Register", width="10", font=(
-    "Helvetica", 12), fg="red", command=janelaRegistar)
-registarButton.place(x=270, y=400)
+
+registarButton = Button(loginwindow, text="Register", width="10", font=("Microsoft YaHei", 12), command=janelaRegistar, bg="#D1BEA6")
+registarButton.place(x=250, y=400)
 
 
 regex = '^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$'

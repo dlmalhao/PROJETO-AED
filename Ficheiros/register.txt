@@ -7,3 +7,4 @@ diogo;diogo23456789234567890@gmail.com;123
 atuaavomorreu;defunto@gmail.com;123
 defunto;hohmo@gmail.com;123
 diogo;borgetaleitinho@gmail.com;123
+miguel;miguel@gmail.com;12345
