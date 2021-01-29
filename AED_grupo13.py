@@ -180,7 +180,7 @@ def main_page():
         
         newrecipe_window = Toplevel()
         newrecipe_window.geometry("800x600")
-        newrecipe_window.title("AED")
+        newrecipe_window.title("Adicionar receita")
         newrecipe_window.resizable(False, False)
 
         newrecipe_window.configure(bg="#D1BEA6")
@@ -270,7 +270,7 @@ def main_page():
 
     window = Toplevel()
     window.geometry("800x600")
-    window.title("Home Page")
+    window.title("Pagina principal")
 
     window.resizable(False, False)
     window.configure(bg="#D1BEA6")
@@ -327,33 +327,206 @@ def main_page():
 
 def admin_mode():
 
-    def recipe_page():
+    def addnewrecipe ():
 
-        def back():
+        def escolhe_imagem(canvas2):
+            
+            imagem=filedialog.askopenfilename(title="Select file", filetypes=(("jpg files",".jpg"),("png files",".png"),("all files",".")))
+            if imagem:
+                canvas2.img = ImageTk.PhotoImage(Image.open(imagem).resize((220, 300)))
+                print(canvas2.img)
+                canvas2.create_image(0,0,anchor = "nw", image = canvas2.img)
 
-            # /-/-/-/-/-/-/-/-/-/-/-
-            # Back button
-            # /-/-/-/-/-/-/-/-/-/-/-
+        window.withdraw()
+        
+        newrecipe_window = Toplevel()
+        newrecipe_window.geometry("800x600")
+        newrecipe_window.title("Adicionar receita")
+        newrecipe_window.resizable(False, False)
 
-            top_window.destroy()
-            window.update()
-            window.deiconify()
+        newrecipe_window.configure(bg="#D1BEA6")
 
-        top_window = Toplevel()
-        top_window.geometry("800x600")
-        top_window.title("Which category ?")
-        top_window.resizable(False, False)
+        panel1 = PanedWindow(newrecipe_window, width=400, height = 500, bd="2", relief="sunken")
+        panel1.place(x = 60, y = 50)
+        
+        header = Label(panel1, text="Adicionar receita", fg="black", font=("Microsoft YaHei", 12))
+        header.place(x = 140, y = 10)
 
-        frame2 = Frame(top_window)
+        titulo = Entry(panel1, width = 35)
+        titulo.place(x = 100, y = 100)
+        titulo_label = Label(panel1, text="Título", fg="black", font=("Microsoft YaHei", 10))
+        titulo_label.place(x=30, y=95)
 
-        # /-/-/-/-/-/-/-/-/-/-/-
-        # Back button place
-        # /-/-/-/-/-/-/-/-/-/-/-
+        preparacao = Text(panel1, width = 30, height = 12, wrap = "word")
+        preparacao.place(x = 100, y = 150)
+        preparacao_label = Label(panel1, text="Modo \n de \n preparação", fg="black", font=("Microsoft YaHei", 10))
+        preparacao_label.place(x=15, y=140)
 
-        back_button = Button(top_window, text="Back", command=back)
-        back_button.place(x=750, y=7)
+        tempo = Entry(panel1, width = 35)
+        tempo.place(x = 100, y = 400)
+        tempo_label = Label(panel1, text="Tempo \n estimado", fg="black", font=("Microsoft YaHei", 10))
+        tempo_label.place(x=15, y=390)
 
-        frame2.place(relx=0.5, rely=0.5, anchor=CENTER)
+
+        #CANVAS PARA FOTO
+        canvas2 = Canvas(newrecipe_window, width = 220, height = 300, bd ="2", relief = "sunken")
+        canvas2.place(x = 520, y = 50)
+
+        btn3 = Button(newrecipe_window, text = "Selecionar imagem", command = partial(escolhe_imagem, canvas2),font=("Microsoft YaHei", 10), bg="#D1BEA6")
+        btn3.place(x =575, y = 370)
+
+
+        #COMBO BOX
+        lista_cb = []
+        with open("Ficheiros//categorias.txt","r") as f:
+            for i in f.readlines() :
+                campos = i.strip().split(";")
+                lista_cb.append(campos[0])
+
+        combo_box = Combobox(newrecipe_window, values = lista_cb)
+        combo_box.place(x = 560, y = 420)
+
+        label_cb = Label(newrecipe_window, text = "Escolher\ncategoria", font=("Microsoft YaHei", 10), bg="#D1BEA6")
+        label_cb.place(x = 485, y = 408)
+
+
+        #LIST BOX   
+        lbox = Listbox(newrecipe_window, height = 4, width = 30)
+        lbox.place(x = 530, y = 500 )
+
+
+        def lbox_add ():
+            item = combo_box.get()
+            if item:
+                if lbox.size() == 0:
+                    lbox.insert(END,item)
+                else:
+                    existemIguais = False
+                    for value in lbox.get(0,END):
+                        if value == item:
+                            existemIguais = True
+                            break
+                    if existemIguais == False:
+                        lbox.insert(END,item)
+                    else:
+                        messagebox.showerror("Erro","Essa categoria já está inserida")
+
+            
+                
+        lbox_btn = Button(newrecipe_window, text = "Adicionar", font=("Microsoft YaHei", 10), bg="#D1BEA6", command = lbox_add)
+        lbox_btn.place(x = 580, y = 460)
+
+
+        newrecipe_window.mainloop()
+
+
+    def janela_adicionar_categoria():
+
+        def adicionar_categoria():
+
+            categoriaExiste = True
+            input_categoria = str(entry_titulo.get())
+            with open("Ficheiros\\register.txt", "a") as f:
+                pass
+            with open("Ficheiros\\categorias.txt","r") as f:
+                for item in f.readlines():
+                    campos = item.strip().split(";")
+                    if not campos[0] == input_categoria:
+                        categoriaExiste = False
+                        break
+                if categoriaExiste == False:
+                    f.write(input_categoria + ";" + input_categoria + "()" + "\n")
+                    messagebox.showinfo("Receita","Receita adicionada com sucesso")
+                else:
+                    messagebox.showerror("Erro","A categoria já existe")
+        
+
+        miniwindow = Toplevel()
+        miniwindow.geometry("400x300")
+        miniwindow.title("Adicionar categoria")
+        miniwindow.resizable(False, False)
+        miniwindow.configure(bg="#D1BEA6")
+        
+        label_titulo = Label(miniwindow, text = "Categoria", font=("Microsoft YaHei", 12), bg="#D1BEA6")
+        label_titulo.place(x = 160, y = 50)
+
+        entry_titulo = Entry(miniwindow, font=("Microsoft YaHei", 10))
+        entry_titulo.place(x = 115, y = 90)
+
+        btn_titulo = Button(miniwindow, text = "Adicionar", font=("Microsoft YaHei", 12), bg="#D1BEA6", command = adicionar_categoria)
+        btn_titulo.place(x = 155, y = 130)
+
+        miniwindow.mainloop()
+
+
+    # def escolhe_imagem():
+    #imagem=filedialog.askopenfilename(title="Select file", filetypes=(("jpg files",".jpg"),("png files",".png"),("all files",".")))
+    #global img
+    #img = ImageTk.PhotoImage(file = imagem)
+    #canvas1.itemconfig(img_id, image=img)
+
+    loginwindow.withdraw()
+
+    window = Toplevel()
+    window.geometry("800x600")
+    window.title("Pagina principal")
+
+    window.resizable(False, False)
+    window.configure(bg="#D1BEA6")
+
+    # MENU BAR
+    barra_Menu = Menu(window)
+
+    categorias_menu = Menu(barra_Menu, tearoff=0)
+
+    barra_Menu.add_cascade(label="Categorias", menu=categorias_menu)
+    barra_Menu.add_command(label="Sair", command=window.quit)
+
+    with open("Ficheiros\\categorias.txt", "r") as f:
+        for linha_ficheiro in f.readlines():
+            campos = linha_ficheiro.strip().split(";")
+            categorias_menu.add_command(label=campos[0])
+
+    window.configure(menu=barra_Menu)
+
+    # CONTAINER
+
+    panel1 = PanedWindow(window, width=200, height=105,
+                         bd="2", relief="sunken")
+    panel1.pack(fill=Y, side=RIGHT)
+
+    canvas1 = Canvas(panel1, width=100, height=100, bd="2", relief="sunken")
+    canvas1.pack(side=TOP)
+
+    admin = Label(panel1, text = "ADMIN",font=("Microsoft YaHei", 10), fg = "red")
+    admin.place(x = 30, y = 115)
+
+    btn_adicionar_categorias = Button(panel1, text = "Adicionar\ncategoria", font=("Microsoft YaHei", 10), command = janela_adicionar_categoria)
+    btn_adicionar_categorias.place(x = 20, y = 140)
+
+    panel2 = PanedWindow(window, width=400, height=500,
+                         bd="2", relief="sunken")
+    panel2.place(x=100, y=50)
+    
+
+    # BUTTON ADD NEW RECIPE
+
+    btn_header = Label(panel2, text="Adicionar receita",
+                       fg="black", font=("Microsoft YaHei", 12))
+    btn_header.place(x=140, y=10)
+
+    btn_add_new_recipe = Button(
+        panel2, text="+", width=4, height=1, font=("Microsoft YaHei", 20), command=addnewrecipe)
+    btn_add_new_recipe.place(x=160, y=50)
+
+    with open("Ficheiros\\perfil.txt", "r")as f:
+        campos2 = f.readline()
+    img10 = campos2.replace("/", "//")
+    img = ImageTk.PhotoImage(file=img10)
+    img_id = canvas1.create_image(0, 0, anchor="nw", image=img)
+
+    window.mainloop()
+
 
     def user():
 
@@ -373,7 +546,7 @@ def admin_mode():
 
         user = Toplevel()
         user.geometry("800x600")
-        user.title("User Page")
+        user.title("Página utilizador")
 
         canvas1 = Canvas(user, width=200, height=200, bd="3", relief="sunken")
         canvas1.place(x=330, y=150)
@@ -391,7 +564,7 @@ def admin_mode():
 
     window = Toplevel()
     window.geometry("800x600")
-    window.title("Home Page")
+    window.title("Página principal")
     window.resizable(False, False)
 
     panel1 = PanedWindow(window, width=100, height=100,
@@ -447,7 +620,7 @@ def login():
 
 loginwindow = Tk()  # invoca classe tk, cria a "main window"
 loginwindow.geometry("800x600")
-loginwindow.title("Projeto de AED")
+loginwindow.title("Login")
 loginwindow.resizable(False, False)
 loginwindow.configure(bg="#D1BEA6")
 
