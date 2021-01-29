@@ -1,9 +1,8 @@
-Frango;Frango()
-Salada;Salada()
-Aperitivos;Aperitivos()
-Massa;Massa()
-Peixe;Peixe()
-Carne;Carne()
-Bolos;Bolos()
-Sopas;Sopas()
-Bebidas;Bebidas()
+Cakes
+Chicken
+Fish
+Meat
+Pasta
+Salad
+Snacks
+Soup
